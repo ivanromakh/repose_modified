@@ -106,7 +106,11 @@ class Retry:
                     catch_response[:] = []
                     continue
                 if catch_response:
-                    start_response(*catch_response)
+                    if catch_response[0] == "500 Internal Server Error":
+                        catch_response[0] = "409 Conflict"
+                        start_response(*catch_response)
+                    else:
+                        start_response(*catch_response)
                 raise
             else:
                 if catch_response:
